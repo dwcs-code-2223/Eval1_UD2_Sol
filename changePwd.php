@@ -52,9 +52,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
                     </form>
 
                     <?php
-                     ini_set('display_errors', 1);
+                    ini_set('display_errors', 1);
                     require_once 'util.php';
-                   
+
                     const MIN_LENGH = 6;
                     $usuarios = array("user1@edu.es" => array("pwd" => "Abc123.", "pwd-1" => "aBc123.", "pwd-2" => "abC123."),
                         "user2@edu.es" => array("pwd" => "123Abc.", "pwd-1" => "123aBc.", "pwd-2" => "123abC."));
@@ -74,7 +74,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
                     $exito = false;
 
                     $errors = array();
-                    $user="";
+                    $user = "";
 
                     if (isset($_POST["email"]) && isset($_POST["email"]) && isset($_POST["newPwd1"]) && isset($_POST["newPwd2"])) {
                         $user = $_POST["email"];
@@ -82,8 +82,27 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
                         $newPwd1 = $_POST["newPwd1"];
                         $newPwd2 = $_POST["newPwd2"];
 
-                        if (validateInput($user, $pwd, $newPwd1, $newPwd2) && isValidNewPwd($user, $newPwd1)) {
-                            actualizarPwd($user, $newPwd1);
+                        if (!existeUser($user, $usuarios)) {
+                            array_push($errors, USER_DOES_NOT_EXIST);
+                        } elseif (!esPwdCorrecta($user, $pwd, $usuarios)) {
+                            array_push($errors, PWD_INCORRECT);
+                        } elseif (!isEqual($newPwd1, $newPwd2)) {
+                            array_push($errors, PWD_MISMATCH);
+                        } elseif (!isValidLength($newPwd1)) {
+                            array_push($errors, MIN_LENGTH_ERROR);
+                        } elseif (fueUsada($user, $newPwd1, $usuarios)) {
+                            array_push($errors, PWD_USED);
+                        } elseif (!contieneMayuscula($newPwd1)) {
+                            array_push($errors, UPPER_CASE_NEEDED);
+                        } elseif (!contieneElementosArray($newPwd1, $numeros)) {
+                            array_push($errors, NUMBER_NEEDED);
+                        } elseif (!contieneElementosArray($newPwd1, $simbolos)) {
+                            array_push($errors, SYMBOL_NEEDED . " " . $simbolos_string);
+                        } else {
+
+                            $usuarios[$user]["pwd-2"] = $usuarios[$user]["pwd-1"];
+                            $usuarios[$user]["pwd-1"] = $usuarios[$user]["pwd"];
+                            $usuarios[$user]["pwd"] = $newPwd1;
                             $exito = true;
                         }
                     }
@@ -92,19 +111,19 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
 
                     <?php if (count($errors) > 0) { ?>
                         <div class="alert alert-danger" role="alert">
-                            <?php
-                            foreach ($errors as $error) {
-                                echo $error . "<br/>";
-                            }
-                            ?>
+                        <?php
+                        foreach ($errors as $error) {
+                            echo $error . "<br/>";
+                        }
+                        ?>
                         </div>
                     <?php } ?>
 
-                    <?php if ($exito) { ?>
+                        <?php if ($exito) { ?>
                         <div class="alert alert-success" role="alert">
                             Se ha actualizado correctamente la contraseña <?php print_r($usuarios[$user]) ?>
                         </div>
-                    <?php } ?>
+                        <?php } ?>
                 </div>
             </div>
         </div>
