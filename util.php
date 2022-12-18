@@ -6,7 +6,7 @@
  */
 /* Orden 1 */
 
-function existeUser(string $user): bool {
+function   existeUser(string $user): bool {
     global $usuarios;
     return array_key_exists($user, $usuarios);
 }
