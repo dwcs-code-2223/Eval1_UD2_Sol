@@ -52,7 +52,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
                     </form>
 
                     <?php
-                    ini_set('display_errors', 1);
+                    ini_set('display_errors', '1');
                     require_once 'util.php';
 
                     const MIN_LENGH = 6;
