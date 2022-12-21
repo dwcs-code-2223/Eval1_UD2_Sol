@@ -76,7 +76,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
                     $errors = array();
                     $user = "";
 
-                    if (isset($_POST["email"]) && isset($_POST["email"]) && isset($_POST["newPwd1"]) && isset($_POST["newPwd2"])) {
+                    if (isset($_POST["email"]) && isset($_POST["pwd"]) && isset($_POST["newPwd1"]) && isset($_POST["newPwd2"])) {
                         $user = $_POST["email"];
                         $pwd = $_POST["pwd"];
                         $newPwd1 = $_POST["newPwd1"];
